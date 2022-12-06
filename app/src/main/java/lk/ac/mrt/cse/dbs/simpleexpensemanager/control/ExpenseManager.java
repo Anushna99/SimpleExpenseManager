@@ -17,6 +17,8 @@
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.control;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -75,8 +77,9 @@ public abstract class ExpenseManager implements Serializable {
      *
      * @return
      */
-    public List<Transaction> getTransactionLogs() {
-        return transactionsHolder.getPaginatedTransactionLogs(10);
+    public List<Transaction> getTransactionLogs() throws ParseException{
+
+            return transactionsHolder.getPaginatedTransactionLogs(10);
     }
 
     /***

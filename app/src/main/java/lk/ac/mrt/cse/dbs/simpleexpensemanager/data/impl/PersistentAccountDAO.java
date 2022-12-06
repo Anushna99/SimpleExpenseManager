@@ -25,7 +25,7 @@ public class PersistentAccountDAO implements AccountDAO {
 
     @Override
     public List<String> getAccountNumbersList(){
-        SQLiteDatabase db = this.dbHandler.getReadable();
+        SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         Cursor cursorAccountNumbers=db.rawQuery("select acc_no from account",null);
         List<String> accountNumbers = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class PersistentAccountDAO implements AccountDAO {
     @Override
     public List<Account> getAccountsList(){
 
-        SQLiteDatabase db = this.dbHandler.getReadable();
+        SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         Cursor cursorAccounts=db.rawQuery("select * from account",null);
         List<Account> accounts = new ArrayList<>();
 
@@ -59,11 +59,11 @@ public class PersistentAccountDAO implements AccountDAO {
 
     @Override
     public Account getAccount(String accountNo) throws InvalidAccountException{
-        SQLiteDatabase db = this.dbHandler.getReadable();
+        SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         String[] params = new String[]{ accountNo };
-        Cursor cursorAccount=db.rawQuery("select * from account where acc_no = ?",params);
+        Cursor cursorAccount=db.rawQuery("select * from account where acc_no ='"+accountNo+"';",null);
 
-        if (cursorAccount.getCount()>0) {//select where
+        if (cursorAccount.moveToFirst()) {
             return new Account(cursorAccount.getString(0),
                                cursorAccount.getString(1),
                                cursorAccount.getString(2),
@@ -75,7 +75,7 @@ public class PersistentAccountDAO implements AccountDAO {
 
     @Override
     public void addAccount(Account account){
-        SQLiteDatabase db = this.dbHandler.getWritable();
+        SQLiteDatabase db = this.dbHandler.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put("acc_no",account.getAccountNo());
@@ -90,7 +90,7 @@ public class PersistentAccountDAO implements AccountDAO {
     @Override
     public void removeAccount(String accountNo) throws InvalidAccountException{
 
-        SQLiteDatabase db = this.dbHandler.getWritable();
+        SQLiteDatabase db = this.dbHandler.getWritableDatabase();
 
         db.delete("account","acc_no=?",new String[]{accountNo});
 
@@ -102,7 +102,7 @@ public class PersistentAccountDAO implements AccountDAO {
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException{
         Account account = this.getAccount(accountNo);
 
-        SQLiteDatabase db = this.dbHandler.getWritable();
+        SQLiteDatabase db = this.dbHandler.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         double newBalance;
@@ -113,9 +113,9 @@ public class PersistentAccountDAO implements AccountDAO {
             newBalance = account.getBalance() + amount;
         }
 
-        values.put("acc_no",account.getAccountNo());
-        values.put("bank_name",account.getBankName());
-        values.put("acc_holder_name",account.getAccountHolderName());
+        //values.put("acc_no",account.getAccountNo());
+        //values.put("bank_name",account.getBankName());
+        //values.put("acc_holder_name",account.getAccountHolderName());
         values.put("balance",newBalance);
 
         db.update("account",values,"acc_no=?",new String[]{accountNo});

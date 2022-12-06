@@ -3,7 +3,11 @@ package lk.ac.mrt.cse.dbs.simpleexpensemanager.data.impl;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +28,11 @@ public class PersistentTransactionDAO implements TransactionDAO {
     @Override
     public void logTransaction(Date date, String accountNo, ExpenseType expenseType, double amount){
 
-        SQLiteDatabase db = this.dbHandler.getWritable();
+        SQLiteDatabase db = this.dbHandler.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("date",date.toString());
+//        DateFormat dateFormat =new SimpleDateFormat("dd-mm-yyyy");
+        Long l1 = date.getTime();
+        values.put("date",l1);
         values.put("acc_no",accountNo);
         values.put("expense_type",expenseType.toString());
         values.put("amount",amount);
@@ -37,18 +43,18 @@ public class PersistentTransactionDAO implements TransactionDAO {
     }
 
     @Override
-    public List<Transaction> getAllTransactionLogs(){
+    public List<Transaction> getAllTransactionLogs() throws ParseException {
 
-        SQLiteDatabase db = this.dbHandler.getReadable();
+        SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         Cursor cursorTransactions=db.rawQuery("select * from trans",null);
         List<Transaction> transactions = new ArrayList<>();
 
         if(cursorTransactions.moveToFirst()){
             do{
-               transactions.add(new Transaction(new Date(cursorTransactions.getLong(0)),
-                                                cursorTransactions.getString(1),
-                                                ExpenseType.valueOf(cursorTransactions.getString(2)),
-                                                cursorTransactions.getDouble(3)));
+               transactions.add(new Transaction(new Date(cursorTransactions.getLong(1)),
+                                                cursorTransactions.getString(2),
+                                                ExpenseType.valueOf(cursorTransactions.getString(3)),
+                                                cursorTransactions.getDouble(4)));
 
             }while (cursorTransactions.moveToNext());
         }
@@ -56,20 +62,14 @@ public class PersistentTransactionDAO implements TransactionDAO {
     }
 
     @Override
-    public List<Transaction> getPaginatedTransactionLogs(int limit){
-        SQLiteDatabase db = this.dbHandler.getReadable();
-        Cursor cursorTransactions=db.rawQuery("select * from trans LIMIT "+String.valueOf(limit),null);
-        List<Transaction> transactions = new ArrayList<>();
-
-        if(cursorTransactions.moveToFirst()){
-            do{
-                transactions.add(new Transaction(new Date(cursorTransactions.getLong(0)),
-                        cursorTransactions.getString(1),
-                        ExpenseType.valueOf(cursorTransactions.getString(2)),
-                        cursorTransactions.getDouble(3)));
-
-            }while (cursorTransactions.moveToNext());
+    public List<Transaction> getPaginatedTransactionLogs(int limit) throws ParseException {
+        Log.d("Anushna","Transactions");
+        List<Transaction> transactions = getAllTransactionLogs();
+        int size = transactions.size();
+        if (size <= limit) {
+            return transactions;
         }
-        return transactions;
+        // return the last <code>limit</code> number of transaction logs
+        return transactions.subList(size - limit, size);
     }
 }
