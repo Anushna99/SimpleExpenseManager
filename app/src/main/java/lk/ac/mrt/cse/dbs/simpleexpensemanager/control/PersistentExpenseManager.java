@@ -14,12 +14,17 @@ public class PersistentExpenseManager extends ExpenseManager {
     Context context;
     public PersistentExpenseManager(Context context){
         this.context=context;
-        setup();
+        try {
+            setup();
+        }catch (ExpenseManagerException e){
+            e.printStackTrace();
+        }
+
     }
 
 
     @Override
-    public void setup() {
+    public void setup() throws ExpenseManagerException {
 
         DBHandler dbHandler = new DBHandler(this.context);
         TransactionDAO persistentTransactionDAO = new PersistentTransactionDAO(dbHandler);

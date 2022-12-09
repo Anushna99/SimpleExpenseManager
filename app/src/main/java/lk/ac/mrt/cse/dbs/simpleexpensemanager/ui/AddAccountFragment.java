@@ -16,6 +16,8 @@
 
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.ui;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.R;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
@@ -97,6 +100,12 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 if (currentExpenseManager != null) {
                     currentExpenseManager.addAccount(accountNumStr, bankNameStr, accountHolderStr,
                             Double.parseDouble(initialBalanceStr));
+                    Context context = view.getContext();
+                    CharSequence text = "Account added successfully";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 cleanUp();
                 break;

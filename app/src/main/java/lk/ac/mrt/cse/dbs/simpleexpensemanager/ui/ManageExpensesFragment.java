@@ -16,6 +16,7 @@
 
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.R;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
@@ -105,6 +107,12 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
                     try {
                         currentExpenseManager.updateAccountBalance(selectedAccount, day, month, year,
                                 ExpenseType.valueOf(type.toUpperCase()), amountStr);
+                        Context context = view.getContext();
+                        CharSequence text = "Transaction logged successfully";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
                     } catch (InvalidAccountException e) {
                         new AlertDialog.Builder(this.getActivity())
                                 .setTitle(this.getString(R.string.msg_account_update_unable) + selectedAccount)

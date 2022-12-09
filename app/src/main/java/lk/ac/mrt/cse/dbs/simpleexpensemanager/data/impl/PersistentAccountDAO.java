@@ -112,8 +112,12 @@ public class PersistentAccountDAO implements AccountDAO {
         else{
             newBalance = account.getBalance() + amount;
         }
+        if(newBalance<0){
+            throw new InvalidAccountException("Account does not have enough balance");
+        }
 
         values.put("balance",newBalance);
+        account.setBalance(newBalance);
 
         db.update("account",values,"acc_no=?",new String[]{accountNo});
         db.close();
