@@ -62,12 +62,7 @@ public class ExpenseLogsFragment extends Fragment {
         currentExpenseManager = (ExpenseManager) getArguments().get(EXPENSE_MANAGER);
         List<Transaction> transactionList = new ArrayList<>();
         if (currentExpenseManager != null) {
-            try {
-                transactionList = currentExpenseManager.getTransactionLogs();
-            }catch (ParseException e){
-                Log.d("Error",e.toString());
-                e.printStackTrace();
-            }
+            transactionList = currentExpenseManager.getTransactionLogs();
 
         }
         generateTransactionsTable(rootView, logsTableLayout, transactionList);

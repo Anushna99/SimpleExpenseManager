@@ -30,7 +30,6 @@ public class PersistentTransactionDAO implements TransactionDAO {
 
         SQLiteDatabase db = this.dbHandler.getWritableDatabase();
         ContentValues values = new ContentValues();
-//        DateFormat dateFormat =new SimpleDateFormat("dd-mm-yyyy");
         Long l1 = date.getTime();
         values.put("date",l1);
         values.put("acc_no",accountNo);
@@ -43,7 +42,7 @@ public class PersistentTransactionDAO implements TransactionDAO {
     }
 
     @Override
-    public List<Transaction> getAllTransactionLogs() throws ParseException {
+    public List<Transaction> getAllTransactionLogs() {
 
         SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         Cursor cursorTransactions=db.rawQuery("select * from trans",null);
@@ -62,8 +61,7 @@ public class PersistentTransactionDAO implements TransactionDAO {
     }
 
     @Override
-    public List<Transaction> getPaginatedTransactionLogs(int limit) throws ParseException {
-        Log.d("Anushna","Transactions");
+    public List<Transaction> getPaginatedTransactionLogs(int limit) {
         List<Transaction> transactions = getAllTransactionLogs();
         int size = transactions.size();
         if (size <= limit) {

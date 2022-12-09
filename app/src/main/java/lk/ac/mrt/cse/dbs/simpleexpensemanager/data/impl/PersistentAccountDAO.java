@@ -61,7 +61,7 @@ public class PersistentAccountDAO implements AccountDAO {
     public Account getAccount(String accountNo) throws InvalidAccountException{
         SQLiteDatabase db = this.dbHandler.getReadableDatabase();
         String[] params = new String[]{ accountNo };
-        Cursor cursorAccount=db.rawQuery("select * from account where acc_no ='"+accountNo+"';",null);
+        Cursor cursorAccount=db.rawQuery("select * from account where acc_no = ? ", params);
 
         if (cursorAccount.moveToFirst()) {
             return new Account(cursorAccount.getString(0),
@@ -113,9 +113,6 @@ public class PersistentAccountDAO implements AccountDAO {
             newBalance = account.getBalance() + amount;
         }
 
-        //values.put("acc_no",account.getAccountNo());
-        //values.put("bank_name",account.getBankName());
-        //values.put("acc_holder_name",account.getAccountHolderName());
         values.put("balance",newBalance);
 
         db.update("account",values,"acc_no=?",new String[]{accountNo});

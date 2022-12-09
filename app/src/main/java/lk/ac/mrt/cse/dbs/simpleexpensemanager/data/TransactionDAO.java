@@ -43,7 +43,7 @@ public interface TransactionDAO {
      *
      * @return - a list of all the transactions
      */
-    public List<Transaction> getAllTransactionLogs() throws ParseException;
+    public List<Transaction> getAllTransactionLogs();
 
     /***
      * Return a limited amount of transactions logged.
@@ -51,5 +51,5 @@ public interface TransactionDAO {
      * @param limit - number of transactions to be returned
      * @return - a list of requested number of transactions
      */
-    public List<Transaction> getPaginatedTransactionLogs(int limit) throws ParseException;
+    public List<Transaction> getPaginatedTransactionLogs(int limit);
 }

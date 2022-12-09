@@ -77,7 +77,7 @@ public abstract class ExpenseManager implements Serializable {
      *
      * @return
      */
-    public List<Transaction> getTransactionLogs() throws ParseException{
+    public List<Transaction> getTransactionLogs(){
 
             return transactionsHolder.getPaginatedTransactionLogs(10);
     }

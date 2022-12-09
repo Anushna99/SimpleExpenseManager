@@ -29,7 +29,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "date TEXT, "
                 + "acc_no TEXT, "
                 + "expense_type TEXT, "
-                + "amount REAL)";
+                + "amount REAL,"
+                + "FOREIGN KEY(acc_no) REFERENCES account(acc_no))";
 
         db.execSQL(query1);
         db.execSQL(query2);
