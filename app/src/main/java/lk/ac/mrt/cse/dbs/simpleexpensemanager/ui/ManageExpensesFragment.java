@@ -108,7 +108,8 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
                         currentExpenseManager.updateAccountBalance(selectedAccount, day, month, year,
                                 ExpenseType.valueOf(type.toUpperCase()), amountStr);
                         Context context = view.getContext();
-                        CharSequence text = "Transaction logged successfully";
+                        CharSequence text = "Transaction successful.. Available balance is Rs. "
+                                + currentExpenseManager.getAccountsDAO().getAccount(selectedAccount).getBalance();
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
